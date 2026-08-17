@@ -31,6 +31,22 @@
   .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s ease, transform .9s ease; }
   .reveal.in { opacity: 1; transform: none; }
 
+  /* masked word-by-word heading reveal */
+  .w { display: inline-block; overflow: hidden; vertical-align: top; }
+  .wi { display: inline-block; transform: translateY(118%); transition: transform 1s cubic-bezier(.22,1,.36,1); }
+  .tsplit.in .wi { transform: none; }
+
+  /* media settles from a slight zoom when it enters the viewport */
+  .zoom { transform: scale(1.14); transition: transform 1.8s cubic-bezier(.22,1,.36,1); }
+  .zoom.in { transform: scale(1); }
+
+  [data-para] { will-change: transform; }
+  .hero video, .hero .inner { will-change: transform, opacity; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .wi, .zoom { transition: none !important; transform: none !important; opacity: 1 !important; }
+  }
+
   /* ---------- header ---------- */
   header {
     position: fixed; top: 0; left: 0; right: 0; z-index: 40;
@@ -38,6 +54,8 @@
     padding: 20px 40px; transition: background .35s ease, box-shadow .35s ease;
   }
   header.solid { background: rgba(244,239,230,.94); box-shadow: 0 2px 24px rgba(40,30,10,.08); backdrop-filter: blur(8px); }
+  header { transition: background .35s ease, box-shadow .35s ease, transform .45s ease; }
+  header.away { transform: translateY(-110%); }
   header .brand {
     font-family: Georgia, serif; font-size: 20px; letter-spacing: .3em; text-indent: .3em;
     color: #fff; text-decoration: none; transition: color .35s;
@@ -179,12 +197,12 @@
 
 <!-- ================= HERO ================= -->
 <div class="hero" id="top">
-  <video autoplay muted loop playsinline preload="metadata"
+  <video id="heroVid" autoplay muted loop playsinline preload="metadata"
     src="https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c6/Aerial_view_of_sand_beach._Top_view_sea_waves._Drone_footage.webm/Aerial_view_of_sand_beach._Top_view_sea_waves._Drone_footage.webm.480p.vp9.webm"></video>
   <div class="veil"></div>
-  <div class="inner">
+  <div class="inner" id="heroInner">
     <div class="kicker">The Caspian Riviera</div>
-    <h1>AZURE COAST</h1>
+    <h1 class="tsplit">AZURE COAST</h1>
     <p>A new city by the sea &mdash; nine kilometres of beach, white quarters, marinas and parks</p>
     <div class="actions">
       <a class="btn light" href="../">Explore the 3D master plan</a>
@@ -198,16 +216,16 @@
 <section id="about">
   <div class="reveal">
     <div class="label">About the project</div>
-    <h2>A city built around the sea</h2>
+    <h2 class="tsplit">A city built around the sea</h2>
     <p class="lead">Azure Coast grows along a nine-kilometre shoreline: snow-white residential quarters,
     a crescent marina island, hotels, schools and parks &mdash; planned as one calm, walkable city
     where every street ends at the water.</p>
   </div>
-  <div class="stats reveal">
-    <div class="stat"><div class="num">310<small> ha</small></div><div class="cap">Master plan area</div></div>
-    <div class="stat"><div class="num">9<small> km</small></div><div class="cap">Sea coastline</div></div>
-    <div class="stat"><div class="num">25</div><div class="cap">Residential projects</div></div>
-    <div class="stat"><div class="num">2029</div><div class="cap">Full completion</div></div>
+  <div class="stats reveal" id="stats">
+    <div class="stat" data-para="0.06"><div class="num"><span data-count="310">0</span><small> ha</small></div><div class="cap">Master plan area</div></div>
+    <div class="stat" data-para="0.16"><div class="num"><span data-count="9">0</span><small> km</small></div><div class="cap">Sea coastline</div></div>
+    <div class="stat" data-para="0.10"><div class="num"><span data-count="25">0</span></div><div class="cap">Residential projects</div></div>
+    <div class="stat" data-para="0.20"><div class="num"><span data-count="2029" data-from="1990">1990</span></div><div class="cap">Full completion</div></div>
   </div>
 </section>
 
@@ -216,14 +234,14 @@
   <div class="split">
     <div class="reveal">
       <div class="label">Live in Azure Coast</div>
-      <h2>Days that begin on the water</h2>
+      <h2 class="tsplit">Days that begin on the water</h2>
       <p class="lead">Morning swims before work, schools within a short walk, evening promenades
       along the marina. The city is planned for people who live here all year &mdash;
       not only for the summer.</p>
       <div style="margin-top:36px"><a class="btn ghost" style="border-color: var(--ink); color: var(--ink);" href="../">See it on the 3D map</a></div>
     </div>
-    <div class="videocard reveal">
-      <video muted loop playsinline preload="none" data-lazy
+    <div class="videocard" data-para="0.09">
+      <video class="zoom" muted loop playsinline preload="none" data-lazy
         src="https://upload.wikimedia.org/wikipedia/commons/transcoded/4/4a/Goishi_Beach_and_Neya_Fishing_Port%2C_Murakami%2C_Niigata%2C_Japan_-_Aerial_Video.webm/Goishi_Beach_and_Neya_Fishing_Port%2C_Murakami%2C_Niigata%2C_Japan_-_Aerial_Video.webm.480p.vp9.webm"></video>
     </div>
   </div>
@@ -233,22 +251,22 @@
 <section id="residences">
   <div class="reveal">
     <div class="label">Real estate</div>
-    <h2>Residences</h2>
+    <h2 class="tsplit">Residences</h2>
     <p class="lead">Six quarters are open for sale today. Every project can be explored
     on the interactive 3D master plan.</p>
   </div>
   <div class="grid reveal">
-    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #5f958f, #e6d3ac)"></div>
+    <a class="card" href="../"><div class="art zoom" style="background: linear-gradient(135deg, #5f958f, #e6d3ac)"></div>
       <div class="meta"><div class="label">Delivery 2027</div><h3>Crescent Marina</h3><div class="go">View on the map &rsaquo;</div></div></a>
-    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #d99a4e, #f4efe6)"></div>
+    <a class="card" href="../"><div class="art zoom" style="background: linear-gradient(135deg, #d99a4e, #f4efe6)"></div>
       <div class="meta"><div class="label">Delivery 2027</div><h3>Lighthouse Bay</h3><div class="go">View on the map &rsaquo;</div></div></a>
-    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #274a63, #a8b183)"></div>
+    <a class="card" href="../"><div class="art zoom" style="background: linear-gradient(135deg, #274a63, #a8b183)"></div>
       <div class="meta"><div class="label">Delivery 2028</div><h3>Panorama Towers</h3><div class="go">View on the map &rsaquo;</div></div></a>
-    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #c9805e, #a8b183)"></div>
+    <a class="card" href="../"><div class="art zoom" style="background: linear-gradient(135deg, #c9805e, #a8b183)"></div>
       <div class="meta"><div class="label">Delivery 2026</div><h3>Garden Villas</h3><div class="go">View on the map &rsaquo;</div></div></a>
-    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #2e6f6a, #e6d3ac)"></div>
+    <a class="card" href="../"><div class="art zoom" style="background: linear-gradient(135deg, #2e6f6a, #e6d3ac)"></div>
       <div class="meta"><div class="label">Delivery 2028</div><h3>Porto Verde</h3><div class="go">View on the map &rsaquo;</div></div></a>
-    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #f4efe6, #274a63)"></div>
+    <a class="card" href="../"><div class="art zoom" style="background: linear-gradient(135deg, #f4efe6, #274a63)"></div>
       <div class="meta"><div class="label">Delivery 2029</div><h3>Star Plaza</h3><div class="go">View on the map &rsaquo;</div></div></a>
   </div>
 </section>
@@ -257,7 +275,7 @@
 <section id="life">
   <div class="reveal">
     <div class="label">Everything for life</div>
-    <h2>The city takes care of the rest</h2>
+    <h2 class="tsplit">The city takes care of the rest</h2>
   </div>
   <div class="amenities reveal">
     <div class="amenity">
@@ -289,13 +307,13 @@
 
 <!-- ================= VIDEO BAND ================= -->
 <section class="band">
-  <video muted loop playsinline preload="none" data-lazy
+  <video muted loop playsinline preload="none" data-lazy data-para="0.12" data-para-scale="1.28"
     src="https://upload.wikimedia.org/wikipedia/commons/transcoded/e/ec/Fujitsuka-hama_Beach_in_Summer%2C_Japan_-_Aerial_Video.webm/Fujitsuka-hama_Beach_in_Summer%2C_Japan_-_Aerial_Video.webm.480p.vp9.webm"></video>
   <div class="veil"></div>
   <div class="inner">
-    <div class="reveal in">
+    <div class="reveal">
       <div class="label" style="color: rgba(255,255,255,.8)">The shore is the city</div>
-      <div class="quote">&ldquo;Quiet luxury is a morning when the sea is the first thing you see.&rdquo;</div>
+      <div class="quote tsplit">&ldquo;Quiet luxury is a morning when the sea is the first thing you see.&rdquo;</div>
     </div>
   </div>
 </section>
@@ -304,7 +322,7 @@
 <section id="contact">
   <div class="reveal">
     <div class="label">Contact</div>
-    <h2>Visit the sales gallery</h2>
+    <h2 class="tsplit">Visit the sales gallery</h2>
   </div>
   <div class="row reveal">
     <div><div class="label">Address</div><p>Azure Coast Sales Gallery<br/>Marina Promenade 1, The Crescent</p></div>
@@ -324,31 +342,113 @@
 </footer>
 
 <script>
-  // header turns solid after leaving the hero
-  const hdr = document.getElementById('hdr');
-  addEventListener('scroll', () => {
-    hdr.classList.toggle('solid', scrollY > innerHeight * 0.75);
-  }, { passive: true });
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // reveal-on-scroll + lazy video playback
-  const io = new IntersectionObserver(entries => {
+  // ---------- split headings into masked words ----------
+  document.querySelectorAll('.tsplit').forEach(el => {
+    const words = el.textContent.trim().split(/\s+/);
+    el.textContent = '';
+    words.forEach((wd, i) => {
+      const outer = document.createElement('span');
+      outer.className = 'w';
+      const inner = document.createElement('span');
+      inner.className = 'wi';
+      inner.textContent = wd;
+      inner.style.transitionDelay = `${i * 60}ms`;
+      outer.appendChild(inner);
+      el.appendChild(outer);
+      el.appendChild(document.createTextNode(' '));
+    });
+  });
+
+  // ---------- animated counters ----------
+  function runCounter(sp) {
+    if (sp.dataset.done) return;
+    sp.dataset.done = '1';
+    const to = parseFloat(sp.dataset.count);
+    const from = parseFloat(sp.dataset.from || 0);
+    if (reduced) { sp.textContent = to; return; }
+    const t0 = performance.now(), dur = 1800;
+    (function step(t) {
+      const k = Math.min(1, (t - t0) / dur);
+      const e = 1 - Math.pow(1 - k, 3);
+      sp.textContent = Math.round(from + (to - from) * e);
+      if (k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+
+  // ---------- enter-viewport effects (one-shot) ----------
+  const ioReveal = new IntersectionObserver(entries => {
     entries.forEach(e => {
-      if (e.target.classList.contains('reveal')) {
-        if (e.isIntersecting) e.target.classList.add('in');
-        return;
-      }
-      // data-lazy videos: load & play in view, pause out of view
-      if (e.isIntersecting) {
-        if (!e.target.dataset.loaded) { e.target.dataset.loaded = '1'; e.target.load(); }
-        e.target.play().catch(() => {});
-      } else {
-        e.target.pause();
-      }
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      e.target.querySelectorAll('[data-count]').forEach(runCounter);
+      ioReveal.unobserve(e.target);
     });
   }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal, .tsplit, .zoom').forEach(el => ioReveal.observe(el));
 
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-  document.querySelectorAll('video[data-lazy]').forEach(v => io.observe(v));
+  // ---------- lazy background videos (play in view, pause out) ----------
+  const ioVideo = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const v = e.target;
+      if (e.isIntersecting) {
+        if (!v.dataset.loaded) { v.dataset.loaded = '1'; v.load(); }
+        v.play().catch(() => {});
+      } else {
+        v.pause();
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('video[data-lazy]').forEach(v => ioVideo.observe(v));
+
+  // ---------- header: solid after hero, hides down, returns up ----------
+  const hdr = document.getElementById('hdr');
+  let lastY = scrollY;
+  addEventListener('scroll', () => {
+    const y = scrollY;
+    hdr.classList.toggle('solid', y > innerHeight * 0.75);
+    const dy = y - lastY;
+    if (y > 300 && dy > 6) hdr.classList.add('away');
+    else if (dy < -6 || y <= 300) hdr.classList.remove('away');
+    lastY = y;
+  }, { passive: true });
+
+  // ---------- scroll engine: hero parallax + multi-speed drift ----------
+  const heroVid = document.getElementById('heroVid');
+  const heroInner = document.getElementById('heroInner');
+  const paras = [...document.querySelectorAll('[data-para]')].map(el => ({
+    el,
+    s: parseFloat(el.dataset.para),
+    extra: el.dataset.paraScale ? ` scale(${el.dataset.paraScale})` : '',
+    y: 0,
+  }));
+
+  let smoothY = scrollY;
+  function frame() {
+    requestAnimationFrame(frame);
+    if (reduced) return;
+    smoothY += (scrollY - smoothY) * 0.1;
+    const vh = innerHeight;
+
+    // hero: video drifts slower than the page, content faster + fades
+    if (smoothY < vh * 1.2) {
+      heroVid.style.transform = `translate3d(0, ${(smoothY * 0.3).toFixed(1)}px, 0) scale(1.06)`;
+      heroInner.style.transform = `translate3d(0, ${(smoothY * 0.45).toFixed(1)}px, 0)`;
+      heroInner.style.opacity = Math.max(0, 1 - smoothY / (vh * 0.72)).toFixed(3);
+    }
+
+    // parallax layers: offset from viewport centre, eased each frame
+    for (const p of paras) {
+      const r = p.el.getBoundingClientRect();
+      const baseCenter = r.top + r.height / 2 - p.y;
+      if (baseCenter < -vh || baseCenter > vh * 2) continue;
+      const target = (vh / 2 - baseCenter) * p.s;
+      p.y += (target - p.y) * 0.12;
+      p.el.style.transform = `translate3d(0, ${p.y.toFixed(2)}px, 0)${p.extra}`;
+    }
+  }
+  requestAnimationFrame(frame);
 </script>
 </body>
 </html>
