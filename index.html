@@ -142,6 +142,35 @@
     transition: opacity 1s ease;
   }
   #hint.hidden { opacity: 0; }
+
+  /* ---------- mobile: panel becomes a bottom sheet ---------- */
+  @media (max-width: 768px) {
+    header { padding: 16px 18px; }
+    header .brand { font-size: 17px; }
+    header .note { display: none; }
+    #hint { font-size: 9px; bottom: 80px; white-space: nowrap; }
+
+    #panel {
+      top: auto; left: 0; right: 0; bottom: 0;
+      width: 100%; max-width: none;
+      height: 62vh; height: 62dvh;
+      border-radius: 18px 18px 0 0;
+      transform: translateY(110%);
+      box-shadow: 0 -18px 50px rgba(20,15,5,.35);
+    }
+    #panel.open { transform: translateY(0); }
+    #panel .visual { height: 34%; min-height: 140px; border-radius: 18px 18px 0 0; overflow: hidden; }
+    #panel .close { left: auto; right: 14px; top: 14px; width: 42px; height: 42px; }
+    #panel .body { padding: 22px 24px 36px; }
+    #panel .body h2 { font-size: 23px; margin: 10px 0 12px; }
+
+    #controls { left: 16px; bottom: 16px; }
+    #controls button { width: 46px; height: 46px; font-size: 16px; }
+
+    /* the sheet already shows the residence info — floating pins on the
+       sliver of visible map just add clutter and clash with the header */
+    body.panel-open .pin { opacity: 0 !important; pointer-events: none !important; }
+  }
 </style>
 </head>
 <body>

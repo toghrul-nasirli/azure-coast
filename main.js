@@ -82,8 +82,11 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(DAY.bg);
 scene.fog = new THREE.Fog(DAY.fog, DAY.fogNear, DAY.fogFar);
 
+const mobileQuery = matchMedia('(max-width: 768px)');
 const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 1, 4000);
-camera.position.set(430, 330, 480);
+// portrait screens need to start further out to fit the whole coast
+if (mobileQuery.matches) camera.position.set(560, 430, 620);
+else camera.position.set(430, 330, 480);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.target.set(20, 0, 10);
@@ -487,15 +490,29 @@ function openResidence(r, el) {
   document.getElementById('panel-art').style.background =
     `linear-gradient(135deg, ${r.art[0]} 0%, ${r.art[1]} 100%)`;
   panel.classList.add('open');
+  document.body.classList.add('panel-open');
   if (activePin) activePin.classList.remove('active');
   activePin = el;
   el.classList.add('active');
+  applyViewOffset();
   flyTo(new THREE.Vector3(...r.anchor));
 }
+// on mobile the sheet covers the lower 62% of the screen, so while it is
+// open, shift the rendered view up so the focused building stays visible
+function applyViewOffset() {
+  if (mobileQuery.matches && panel.classList.contains('open')) {
+    camera.setViewOffset(innerWidth, innerHeight, 0, innerHeight * 0.31, innerWidth, innerHeight);
+  } else {
+    camera.clearViewOffset();
+  }
+}
+
 function closePanel() {
   panel.classList.remove('open');
+  document.body.classList.remove('panel-open');
   if (activePin) activePin.classList.remove('active');
   activePin = null;
+  applyViewOffset();
 }
 document.getElementById('panel-close').addEventListener('click', closePanel);
 addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
@@ -506,8 +523,9 @@ function flyTo(target) {
   controls.autoRotate = false;
   const dir = camera.position.clone().sub(controls.target);
   dir.y = 0;
-  dir.normalize().multiplyScalar(240);
-  const endPos = target.clone().add(dir).add(new THREE.Vector3(0, 170, 0));
+  // narrower portrait fov: stay further back so the quarter fits the frame
+  dir.normalize().multiplyScalar(mobileQuery.matches ? 330 : 240);
+  const endPos = target.clone().add(dir).add(new THREE.Vector3(0, mobileQuery.matches ? 230 : 170, 0));
   const endTgt = target.clone().setY(Math.min(target.y, 30));
   fly = {
     t: 0,
@@ -563,13 +581,18 @@ function animate() {
     if (c.position.x > 700) c.position.x = -700;
   });
 
-  // project pins to screen space
+  // project pins to screen space; write visibility only on change so the
+  // CSS opacity transition is never retriggered mid-fade
   RESIDENCES.forEach((r, i) => {
     v3.set(...r.anchor).project(camera);
     const el = pinEls[i];
-    if (v3.z > 1) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; return; }
-    el.style.opacity = '1';
-    el.style.pointerEvents = 'auto';
+    const vis = v3.z <= 1 ? '1' : '0';
+    if (el.dataset.vis !== vis) {
+      el.dataset.vis = vis;
+      el.style.opacity = vis;
+      el.style.pointerEvents = vis === '1' ? 'auto' : 'none';
+    }
+    if (vis === '0') return;
     el.style.left = `${(v3.x * 0.5 + 0.5) * innerWidth}px`;
     el.style.top = `${(-v3.y * 0.5 + 0.5) * innerHeight}px`;
   });
@@ -582,6 +605,7 @@ addEventListener('resize', () => {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
+  applyViewOffset();
 });
 
 // splash out
