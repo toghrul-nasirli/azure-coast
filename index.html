@@ -143,6 +143,10 @@
   }
   #hint.hidden { opacity: 0; }
 
+  /* embed mode (?embed): bare 3D scene for framing inside other pages */
+  body.embed header, body.embed #pins, body.embed #controls,
+  body.embed #hint, body.embed #panel, body.embed #splash { display: none; }
+
   /* ---------- mobile: panel becomes a bottom sheet ---------- */
   @media (max-width: 768px) {
     header { padding: 16px 18px; }

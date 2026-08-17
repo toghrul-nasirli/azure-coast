@@ -10,7 +10,8 @@
     --ink: #1c2b33;
     --paper: #f4efe6;
     --teal: #2e6f6a;
-    --gold: #d99a4e;
+    --aqua: #4fc3d8;
+    --gold: #ac9464;
     --muted: #8a8577;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -19,9 +20,8 @@
     font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
     background: var(--paper); color: var(--ink);
   }
-  img, video { display: block; max-width: 100%; }
+  img, video, svg { display: block; max-width: 100%; }
   a { color: inherit; }
-  .serif { font-family: Georgia, "Times New Roman", serif; font-weight: 500; }
   .label {
     font-size: 11px; letter-spacing: .28em; text-transform: uppercase;
     color: var(--muted);
@@ -41,20 +41,15 @@
   .zoom.in { transform: scale(1); }
 
   [data-para] { will-change: transform; }
-  .hero video, .hero .inner { will-change: transform, opacity; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .reveal, .wi, .zoom { transition: none !important; transform: none !important; opacity: 1 !important; }
-  }
 
   /* ---------- header ---------- */
   header {
     position: fixed; top: 0; left: 0; right: 0; z-index: 40;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 40px; transition: background .35s ease, box-shadow .35s ease;
+    padding: 20px 40px;
+    transition: background .35s ease, box-shadow .35s ease, transform .45s ease;
   }
   header.solid { background: rgba(244,239,230,.94); box-shadow: 0 2px 24px rgba(40,30,10,.08); backdrop-filter: blur(8px); }
-  header { transition: background .35s ease, box-shadow .35s ease, transform .45s ease; }
   header.away { transform: translateY(-110%); }
   header .brand {
     font-family: Georgia, serif; font-size: 20px; letter-spacing: .3em; text-indent: .3em;
@@ -67,77 +62,132 @@
     text-decoration: none; color: rgba(255,255,255,.9); transition: color .35s;
   }
   header.solid nav a { color: var(--ink); }
-  header nav a.cta {
-    border: 1px solid currentColor; padding: 10px 18px; border-radius: 2px;
-  }
+  header nav a.cta { border: 1px solid currentColor; padding: 10px 18px; border-radius: 2px; }
   @media (max-width: 700px) {
     header { padding: 16px 20px; }
     header nav a:not(.cta) { display: none; }
     header .brand { font-size: 16px; }
   }
 
-  /* ---------- hero ---------- */
-  .hero { position: relative; height: 100vh; height: 100dvh; overflow: hidden; background: #23423f; }
-  .hero video {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  /* =============== ACT 1 · portal into the 3D city =============== */
+  #act1 { position: relative; height: 340vh; }
+  #act1 .stage {
+    position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden;
+    background: linear-gradient(180deg, #232c47 0%, #3d4468 52%, #8a7386 100%);
   }
-  .hero .veil {
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(15,30,35,.35) 0%, rgba(15,30,35,.15) 45%, rgba(15,30,35,.55) 100%);
+  #act1 .rings { position: absolute; inset: 0; width: 100%; height: 100%; will-change: transform; }
+  #act1 .rings circle { fill: none; stroke: rgba(255,255,255,.16); stroke-width: 1; }
+  #act1 .title {
+    position: absolute; left: 0; right: 0; top: 16%;
+    text-align: center; color: #fff; z-index: 3; pointer-events: none;
+    will-change: transform, opacity;
   }
-  .hero .inner {
-    position: relative; z-index: 2; height: 100%;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; color: #fff; padding: 0 24px;
+  #act1 .title .kicker { font-size: 12px; letter-spacing: .38em; text-transform: uppercase; opacity: .8; }
+  #act1 .title h1 {
+    font-family: Georgia, "Times New Roman", serif; font-weight: 500;
+    font-size: clamp(46px, 9vw, 118px); line-height: 1.06;
+    letter-spacing: .12em; text-indent: .12em; margin-top: 22px;
   }
-  .hero .kicker { font-size: 12px; letter-spacing: .38em; text-transform: uppercase; opacity: .85; }
-  .hero h1 {
-    font-family: Georgia, serif; font-weight: 500;
-    font-size: clamp(44px, 8vw, 92px); letter-spacing: .18em; text-indent: .18em;
-    margin: 26px 0 18px;
+  #act1 .portal {
+    position: absolute; inset: 0; z-index: 2;
+    background: linear-gradient(160deg, #16323c, #2e6f6a);
+    clip-path: circle(90px at 50% 86%);
+    will-change: clip-path;
   }
-  .hero p { max-width: 560px; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; line-height: 2; opacity: .9; }
-  .hero .actions { margin-top: 44px; display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
-  .btn {
-    display: inline-block; padding: 16px 34px; border-radius: 2px; text-decoration: none;
-    font-size: 11px; letter-spacing: .22em; text-transform: uppercase; transition: all .25s;
+  #act1 .portal iframe {
+    position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
+    pointer-events: none;
   }
-  .btn.light { background: rgba(255,255,255,.92); color: var(--ink); }
-  .btn.light:hover { background: #fff; }
-  .btn.ghost { border: 1px solid rgba(255,255,255,.7); color: #fff; }
-  .btn.ghost:hover { background: rgba(255,255,255,.15); }
-  .hero .scroll {
-    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 2;
-    color: #fff; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; opacity: .8;
+  #act1 .scrollhint {
+    position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 3;
+    color: rgba(255,255,255,.85); font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
   }
-  .hero .scroll::after {
-    content: ""; display: block; width: 1px; height: 34px; background: #fff;
+  #act1 .scrollhint::after {
+    content: ""; display: block; width: 1px; height: 32px; background: #fff;
     margin: 10px auto 0; animation: drip 2s ease infinite;
   }
   @keyframes drip { 0% { transform: scaleY(0); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: top; } 100% { transform: scaleY(0); transform-origin: bottom; } }
 
-  /* ---------- sections ---------- */
-  section { padding: 110px 8vw; }
-  section h2 {
+  /* =============== ACT 2 · sliding headline =============== */
+  #act2 { padding: 22vh 0 14vh; overflow: hidden; background: var(--paper); }
+  #act2 .mq {
+    white-space: nowrap; font-family: Georgia, serif; font-weight: 500;
+    font-size: clamp(84px, 15vw, 230px); color: var(--gold);
+    letter-spacing: .04em; line-height: 1; margin-left: -30vw;
+    will-change: transform;
+  }
+  #act2 .lead {
+    max-width: 620px; margin: 12vh auto 0; padding: 0 24px; text-align: center;
+    font-size: 13px; letter-spacing: .08em; line-height: 2.1; text-transform: uppercase; color: #4a463c;
+  }
+
+  /* =============== ACT 3 · the route draws itself =============== */
+  #act3 { background: var(--paper); padding: 6vh 0 10vh; }
+  #act3 svg { width: 100%; height: auto; }
+  #act3 .road { fill: none; stroke: #d9d2c0; stroke-width: 1.3; }
+  #act3 .sea { font-family: Georgia, serif; font-size: 17px; letter-spacing: .3em; fill: #c4bca6; text-transform: uppercase; }
+  #act3 .route { fill: none; stroke: #2e8f96; stroke-width: 3; stroke-linecap: round; }
+  #act3 .mk circle.bg { fill: #2e8f96; }
+  #act3 .mk { opacity: 0; transform: scale(.4); transform-origin: center; transform-box: fill-box; transition: opacity .5s ease, transform .5s cubic-bezier(.22,1,.36,1); }
+  #act3 .mk.on { opacity: 1; transform: scale(1); }
+  #act3 .mk text { font-family: Georgia, serif; font-size: 34px; letter-spacing: .12em; fill: var(--ink); }
+  #act3 .mk .sub { font-family: inherit; font-size: 15px; letter-spacing: .22em; fill: var(--muted); }
+  #act3 .mk .glyph { fill: #fff; stroke: none; }
+
+  /* =============== ACT 4 · gauge slides =============== */
+  #act4 { position: relative; height: 360vh; }
+  #act4 .stage {
+    position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden;
+    background: #10201f; color: #fff;
+  }
+  #act4 video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  #act4 .veil { position: absolute; inset: 0; background: rgba(8,24,24,.58); }
+  #act4 .content { position: absolute; inset: 0; z-index: 2; transition: opacity .3s linear; }
+  #act4 .gauge {
+    position: absolute; left: 50%; top: 50%; width: min(74vmin, 560px); height: min(74vmin, 560px);
+    transform: translate(-50%, -50%);
+  }
+  #act4 .gauge .guide { fill: none; stroke: rgba(255,255,255,.16); stroke-width: 1; }
+  #act4 .gauge .arc { fill: none; stroke: var(--aqua); stroke-linecap: round; }
+  #act4 .gauge-label {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    font-family: Georgia, serif; font-size: clamp(16px, 2vw, 24px); letter-spacing: .28em;
+    text-transform: uppercase; text-align: center; max-width: 32vmin; line-height: 1.7;
+  }
+  #act4 .side {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    max-width: 34vw;
+  }
+  #act4 .side.left { left: 4vw; text-align: left; }
+  #act4 .side.right { right: 4vw; text-align: right; }
+  #act4 .side .cap { font-size: 10px; letter-spacing: .26em; text-transform: uppercase; color: rgba(255,255,255,.75); line-height: 1.9; }
+  #act4 .side .big {
+    font-family: Georgia, serif; font-size: clamp(64px, 11vw, 170px); line-height: 1.1;
+  }
+  @media (max-width: 700px) {
+    #act4 .side .big { font-size: clamp(44px, 13vw, 80px); }
+    #act4 .gauge-label { font-size: 12px; }
+  }
+
+  /* ---------- classic sections ---------- */
+  section.block { padding: 110px 8vw; }
+  section.block h2 {
     font-family: Georgia, serif; font-weight: 500;
     font-size: clamp(30px, 4vw, 46px); letter-spacing: .08em; margin: 18px 0 26px;
   }
-  section .lead { max-width: 620px; font-size: 13px; letter-spacing: .06em; line-height: 2.1; color: #4a463c; text-transform: uppercase; }
+  section.block .lead { max-width: 620px; font-size: 13px; letter-spacing: .06em; line-height: 2.1; color: #4a463c; text-transform: uppercase; }
+  .btn {
+    display: inline-block; padding: 16px 34px; border-radius: 2px; text-decoration: none;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase; transition: all .25s;
+  }
+  .btn.ghost { border: 1px solid var(--ink); color: var(--ink); }
+  .btn.ghost:hover { background: rgba(28,43,51,.08); }
 
-  /* stats */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 40px; margin-top: 70px; }
-  .stats .stat { border-top: 1px solid #d8cfba; padding-top: 22px; }
-  .stats .num { font-family: Georgia, serif; font-size: 46px; color: var(--teal); }
-  .stats .num small { font-size: 22px; }
-  .stats .cap { margin-top: 8px; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
-
-  /* split section */
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: 7vw; align-items: center; }
   @media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
   .videocard { position: relative; border-radius: 4px; overflow: hidden; box-shadow: 0 30px 70px rgba(40,30,10,.22); aspect-ratio: 4 / 3; background: linear-gradient(135deg, #5f958f, #e6d3ac); }
   .videocard video { width: 100%; height: 100%; object-fit: cover; }
 
-  /* residences */
   #residences { background: #ece5d6; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 26px; margin-top: 56px; }
   .card {
@@ -151,17 +201,12 @@
   .card .meta h3 { font-family: Georgia, serif; font-weight: 500; font-size: 21px; letter-spacing: .06em; margin: 8px 0 10px; }
   .card .meta .go { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); }
 
-  /* amenities */
   .amenities { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 22px; margin-top: 56px; }
-  .amenity {
-    background: #fff; border-radius: 4px; padding: 30px 26px;
-    box-shadow: 0 10px 30px rgba(40,30,10,.07);
-  }
+  .amenity { background: #fff; border-radius: 4px; padding: 30px 26px; box-shadow: 0 10px 30px rgba(40,30,10,.07); }
   .amenity svg { width: 34px; height: 34px; stroke: var(--teal); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
   .amenity h3 { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; margin: 18px 0 10px; }
   .amenity p { font-size: 12px; line-height: 1.8; color: #6a6558; }
 
-  /* wide video band */
   .band { position: relative; height: 72vh; min-height: 420px; overflow: hidden; background: #23423f; padding: 0; }
   .band video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .band .veil { position: absolute; inset: 0; background: rgba(15,30,35,.42); }
@@ -171,7 +216,6 @@
   }
   .band .inner .quote { font-family: Georgia, serif; font-size: clamp(24px, 3.4vw, 40px); letter-spacing: .1em; max-width: 800px; line-height: 1.5; }
 
-  /* contact / footer */
   #contact .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; margin-top: 56px; }
   #contact .row .label { margin-bottom: 12px; }
   #contact .row p { font-size: 14px; line-height: 1.9; }
@@ -181,12 +225,16 @@
   }
   footer .fine { font-size: 10px; letter-spacing: .08em; color: var(--muted); line-height: 1.8; max-width: 640px; }
   footer a { color: var(--teal); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .wi, .zoom, #act3 .mk { transition: none !important; transform: none !important; opacity: 1 !important; }
+  }
 </style>
 </head>
 <body>
 
 <header id="hdr">
-  <a class="brand" href="#top">AZURE COAST</a>
+  <a class="brand" href="#act1">AZURE COAST</a>
   <nav>
     <a href="#live">Life</a>
     <a href="#residences">Residences</a>
@@ -195,42 +243,103 @@
   </nav>
 </header>
 
-<!-- ================= HERO ================= -->
-<div class="hero" id="top">
-  <video id="heroVid" autoplay muted loop playsinline preload="metadata"
-    src="https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c6/Aerial_view_of_sand_beach._Top_view_sea_waves._Drone_footage.webm/Aerial_view_of_sand_beach._Top_view_sea_waves._Drone_footage.webm.480p.vp9.webm"></video>
-  <div class="veil"></div>
-  <div class="inner" id="heroInner">
-    <div class="kicker">The Caspian Riviera</div>
-    <h1 class="tsplit">AZURE COAST</h1>
-    <p>A new city by the sea &mdash; nine kilometres of beach, white quarters, marinas and parks</p>
-    <div class="actions">
-      <a class="btn light" href="../">Explore the 3D master plan</a>
-      <a class="btn ghost" href="#residences">Residences</a>
+<!-- ============ ACT 1 · a circle opens into the living 3D city ============ -->
+<div id="act1">
+  <div class="stage">
+    <svg class="rings" id="rings" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+      <circle cx="50" cy="58" r="26"/>
+      <circle cx="50" cy="58" r="38"/>
+      <circle cx="50" cy="58" r="50"/>
+    </svg>
+    <div class="title" id="a1title">
+      <div class="kicker">Azure Coast</div>
+      <h1>THE CITY<br/>OF TOMORROW</h1>
     </div>
+    <div class="portal" id="portal">
+      <iframe src="../?embed=1" title="Azure Coast 3D master plan" loading="eager"></iframe>
+    </div>
+    <div class="scrollhint" id="a1hint">Scroll</div>
   </div>
-  <div class="scroll">Scroll</div>
 </div>
 
-<!-- ================= INTRO / STATS ================= -->
-<section id="about">
-  <div class="reveal">
-    <div class="label">About the project</div>
-    <h2 class="tsplit">A city built around the sea</h2>
-    <p class="lead">Azure Coast grows along a nine-kilometre shoreline: snow-white residential quarters,
-    a crescent marina island, hotels, schools and parks &mdash; planned as one calm, walkable city
-    where every street ends at the water.</p>
-  </div>
-  <div class="stats reveal" id="stats">
-    <div class="stat" data-para="0.06"><div class="num"><span data-count="310">0</span><small> ha</small></div><div class="cap">Master plan area</div></div>
-    <div class="stat" data-para="0.16"><div class="num"><span data-count="9">0</span><small> km</small></div><div class="cap">Sea coastline</div></div>
-    <div class="stat" data-para="0.10"><div class="num"><span data-count="25">0</span></div><div class="cap">Residential projects</div></div>
-    <div class="stat" data-para="0.20"><div class="num"><span data-count="2029" data-from="1990">1990</span></div><div class="cap">Full completion</div></div>
-  </div>
+<!-- ============ ACT 2 · headline slides across the page ============ -->
+<section id="act2">
+  <div class="mq" id="mq">CLOSER TO YOUR DREAMS THAN YOU THINK</div>
+  <p class="lead reveal">A premium resort city on the Caspian shore, twenty-five minutes from the capital.
+  Nature, innovative planning and nine kilometres of beach &mdash; nearer than you imagine.</p>
 </section>
 
+<!-- ============ ACT 3 · the route draws itself ============ -->
+<section id="act3">
+  <svg id="mapsvg" viewBox="0 0 1440 900" aria-label="Stylised route map">
+    <!-- abstract road network (original artwork) -->
+    <path class="road" d="M-20,120 C180,150 260,90 420,140 S760,110 900,190 S1240,170 1460,240"/>
+    <path class="road" d="M-20,300 C200,270 330,340 470,320 S740,260 880,330 S1180,390 1460,340"/>
+    <path class="road" d="M60,-20 C90,180 40,330 130,470 S220,700 180,920"/>
+    <path class="road" d="M380,-20 C420,140 350,320 430,470 S520,690 470,920"/>
+    <path class="road" d="M-20,560 C240,520 420,600 640,560 S1010,480 1230,560 1460,520 1460,520"/>
+    <path class="road" d="M-20,740 C260,700 480,790 720,740 S1120,660 1460,730"/>
+    <path class="road" d="M960,-20 C920,160 1010,320 950,470 S870,700 930,920"/>
+    <path class="road" d="M1230,-20 C1260,190 1180,350 1260,520 S1330,740 1290,920"/>
+    <path class="road" d="M620,-20 C660,120 600,260 680,390 S760,620 700,920"/>
+    <path class="road" d="M-20,430 C170,470 400,410 560,450 S900,430 1050,470 1460,430 1460,430"/>
+    <text class="sea" x="1120" y="120">The Caspian Sea</text>
+    <text class="sea" x="120" y="850">The Caspian Sea</text>
+
+    <!-- the animated route -->
+    <path class="route" id="route" d="M760,170 C820,240 900,300 950,380 C990,445 980,470 950,510 C880,590 760,640 660,720"/>
+
+    <g class="mk" id="mk1">
+      <circle class="bg" cx="760" cy="170" r="30"/>
+      <circle class="glyph" cx="760" cy="163" r="7"/>
+      <path class="glyph" d="M760,186 l-10,-14 a12,12 0 1 1 20,0 z"/>
+      <text x="800" y="160">AZURE</text>
+      <text x="800" y="196">COAST</text>
+    </g>
+    <g class="mk" id="mk2">
+      <circle class="bg" cx="950" cy="510" r="26"/>
+      <path class="glyph" d="M938,516 l24,-6 -9,-4 2,-9 -5,2 -7,-6 3,10 -8,7 8,-1 z"/>
+      <text class="sub" x="990" y="505">THE INTERNATIONAL</text>
+      <text class="sub" x="990" y="528">AIRPORT</text>
+    </g>
+    <g class="mk" id="mk3">
+      <circle class="bg" cx="660" cy="720" r="30"/>
+      <path class="glyph" d="M668,706 a16,16 0 1 0 0,28 a12,12 0 1 1 0,-28 z"/>
+      <text x="610" y="775">THE CAPITAL</text>
+    </g>
+  </svg>
+</section>
+
+<!-- ============ ACT 4 · the numbers, dialled in ============ -->
+<div id="act4">
+  <div class="stage">
+    <video muted loop playsinline preload="none" data-lazy
+      src="https://upload.wikimedia.org/wikipedia/commons/transcoded/e/ec/Fujitsuka-hama_Beach_in_Summer%2C_Japan_-_Aerial_Video.webm/Fujitsuka-hama_Beach_in_Summer%2C_Japan_-_Aerial_Video.webm.480p.vp9.webm"></video>
+    <div class="veil"></div>
+    <div class="content" id="a4content">
+      <svg class="gauge" viewBox="0 0 560 560">
+        <circle class="guide" cx="280" cy="280" r="160"/>
+        <circle class="guide" cx="280" cy="280" r="200"/>
+        <circle class="guide" cx="280" cy="280" r="240"/>
+        <circle class="arc" id="arc1" cx="280" cy="280" r="160" stroke-width="2.5" transform="rotate(-90 280 280)"/>
+        <circle class="arc" id="arc2" cx="280" cy="280" r="200" stroke-width="4" transform="rotate(-80 280 280)"/>
+        <circle class="arc" id="arc3" cx="280" cy="280" r="240" stroke-width="6" transform="rotate(-70 280 280)"/>
+      </svg>
+      <div class="gauge-label" id="a4label">Real estate</div>
+      <div class="side left">
+        <div class="cap" id="a4lcap">2026 &middot; Built</div>
+        <div class="big" id="a4lnum">40</div>
+      </div>
+      <div class="side right">
+        <div class="cap" id="a4rcap">2030 &middot; Planned</div>
+        <div class="big" id="a4rnum">220</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ================= LIVE ================= -->
-<section id="live">
+<section class="block" id="live">
   <div class="split">
     <div class="reveal">
       <div class="label">Live in Azure Coast</div>
@@ -238,7 +347,7 @@
       <p class="lead">Morning swims before work, schools within a short walk, evening promenades
       along the marina. The city is planned for people who live here all year &mdash;
       not only for the summer.</p>
-      <div style="margin-top:36px"><a class="btn ghost" style="border-color: var(--ink); color: var(--ink);" href="../">See it on the 3D map</a></div>
+      <div style="margin-top:36px"><a class="btn ghost" href="../">See it on the 3D map</a></div>
     </div>
     <div class="videocard" data-para="0.09">
       <video class="zoom" muted loop playsinline preload="none" data-lazy
@@ -248,7 +357,7 @@
 </section>
 
 <!-- ================= RESIDENCES ================= -->
-<section id="residences">
+<section class="block" id="residences">
   <div class="reveal">
     <div class="label">Real estate</div>
     <h2 class="tsplit">Residences</h2>
@@ -272,7 +381,7 @@
 </section>
 
 <!-- ================= AMENITIES ================= -->
-<section id="life">
+<section class="block" id="life">
   <div class="reveal">
     <div class="label">Everything for life</div>
     <h2 class="tsplit">The city takes care of the rest</h2>
@@ -283,7 +392,7 @@
       <h3>Hotels</h3><p>Boutique and resort hotels on the first line, open all year round.</p></div>
     <div class="amenity">
       <svg viewBox="0 0 24 24"><path d="M5 3v7a3 3 0 0 0 6 0V3M8 3v18M18 3c-2 2-2.5 5-2.5 8H18v10"/></svg>
-      <h3>Restaurants &amp; bars</h3><p>Seafront dining, cafés and beach bars along the promenades.</p></div>
+      <h3>Restaurants &amp; bars</h3><p>Seafront dining, caf&eacute;s and beach bars along the promenades.</p></div>
     <div class="amenity">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"/><path d="M6 21v-3a6 6 0 0 1 12 0v3M9 13l-3 3M15 13l3 3"/></svg>
       <h3>For kids</h3><p>Kindergartens, an international school and shaded playgrounds.</p></div>
@@ -319,7 +428,7 @@
 </section>
 
 <!-- ================= CONTACT ================= -->
-<section id="contact">
+<section class="block" id="contact">
   <div class="reveal">
     <div class="label">Contact</div>
     <h2 class="tsplit">Visit the sales gallery</h2>
@@ -336,13 +445,15 @@
   <div class="fine">
     Azure Coast is a fictional demonstration project. It is not affiliated with, endorsed by, or connected to
     any real development. All names, figures and dates are invented. Background videos are free-licensed
-    footage from Wikimedia Commons.
+    footage from Wikimedia Commons. The hero circle frames the project&rsquo;s own real-time 3D master plan.
   </div>
   <div class="fine"><a href="../">3D master plan</a></div>
 </footer>
 
 <script>
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp01 = v => Math.min(1, Math.max(0, v));
+  const easeIO = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
   // ---------- split headings into masked words ----------
   document.querySelectorAll('.tsplit').forEach(el => {
@@ -361,34 +472,17 @@
     });
   });
 
-  // ---------- animated counters ----------
-  function runCounter(sp) {
-    if (sp.dataset.done) return;
-    sp.dataset.done = '1';
-    const to = parseFloat(sp.dataset.count);
-    const from = parseFloat(sp.dataset.from || 0);
-    if (reduced) { sp.textContent = to; return; }
-    const t0 = performance.now(), dur = 1800;
-    (function step(t) {
-      const k = Math.min(1, (t - t0) / dur);
-      const e = 1 - Math.pow(1 - k, 3);
-      sp.textContent = Math.round(from + (to - from) * e);
-      if (k < 1) requestAnimationFrame(step);
-    })(t0);
-  }
-
   // ---------- enter-viewport effects (one-shot) ----------
   const ioReveal = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       e.target.classList.add('in');
-      e.target.querySelectorAll('[data-count]').forEach(runCounter);
       ioReveal.unobserve(e.target);
     });
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal, .tsplit, .zoom').forEach(el => ioReveal.observe(el));
 
-  // ---------- lazy background videos (play in view, pause out) ----------
+  // ---------- lazy background videos ----------
   const ioVideo = new IntersectionObserver(entries => {
     entries.forEach(e => {
       const v = e.target;
@@ -402,21 +496,74 @@
   }, { threshold: 0.1 });
   document.querySelectorAll('video[data-lazy]').forEach(v => ioVideo.observe(v));
 
-  // ---------- header: solid after hero, hides down, returns up ----------
+  // ---------- header ----------
   const hdr = document.getElementById('hdr');
+  const act1 = document.getElementById('act1');
   let lastY = scrollY;
   addEventListener('scroll', () => {
     const y = scrollY;
-    hdr.classList.toggle('solid', y > innerHeight * 0.75);
+    hdr.classList.toggle('solid', y > act1.offsetHeight - innerHeight * 0.5);
     const dy = y - lastY;
     if (y > 300 && dy > 6) hdr.classList.add('away');
     else if (dy < -6 || y <= 300) hdr.classList.remove('away');
     lastY = y;
   }, { passive: true });
 
-  // ---------- scroll engine: hero parallax + multi-speed drift ----------
-  const heroVid = document.getElementById('heroVid');
-  const heroInner = document.getElementById('heroInner');
+  // ---------- act elements ----------
+  const portal = document.getElementById('portal');
+  const a1title = document.getElementById('a1title');
+  const a1hint = document.getElementById('a1hint');
+  const rings = document.getElementById('rings');
+  const mq = document.getElementById('mq');
+  const act3 = document.getElementById('act3');
+  const route = document.getElementById('route');
+  const routeLen = route.getTotalLength();
+  route.style.strokeDasharray = routeLen;
+  route.style.strokeDashoffset = routeLen;
+  const marks = [document.getElementById('mk1'), document.getElementById('mk2'), document.getElementById('mk3')];
+  const act4 = document.getElementById('act4');
+  const a4content = document.getElementById('a4content');
+  const a4label = document.getElementById('a4label');
+  const a4lcap = document.getElementById('a4lcap');
+  const a4rcap = document.getElementById('a4rcap');
+  const a4lnum = document.getElementById('a4lnum');
+  const a4rnum = document.getElementById('a4rnum');
+  const arcs = [
+    { el: document.getElementById('arc1'), r: 160, frac: 0.40 },
+    { el: document.getElementById('arc2'), r: 200, frac: 0.52 },
+    { el: document.getElementById('arc3'), r: 240, frac: 0.64 },
+  ];
+  arcs.forEach(a => {
+    a.C = 2 * Math.PI * a.r;
+    a.el.style.strokeDasharray = a.C;
+    a.el.style.strokeDashoffset = a.C;
+  });
+  const SLIDES = [
+    { label: 'Real estate', lcap: '2026 · Built', rcap: '2030 · Planned', l: '40', r: '220' },
+    { label: 'Total area · ha', lcap: '2026 · Developed', rcap: '2030 · Planned', l: '310', r: '480' },
+    { label: 'Residents', lcap: '2026 · Thousand', rcap: '2030 · Thousand', l: '12', r: '60' },
+  ];
+  let curSlide = -1;
+  function setSlide(i) {
+    if (i === curSlide) return;
+    curSlide = i;
+    const s = SLIDES[i];
+    a4label.textContent = s.label;
+    a4lcap.textContent = s.lcap; a4rcap.textContent = s.rcap;
+    a4lnum.textContent = s.l; a4rnum.textContent = s.r;
+  }
+  setSlide(0);
+
+  // ---------- reduced motion: settle everything to its final state ----------
+  if (reduced) {
+    portal.style.clipPath = 'none';
+    a1title.style.opacity = '0';
+    route.style.strokeDashoffset = 0;
+    marks.forEach(m => m.classList.add('on'));
+    arcs.forEach(a => a.el.style.strokeDashoffset = a.C * (1 - a.frac));
+  }
+
+  // ---------- parallax registry ----------
   const paras = [...document.querySelectorAll('[data-para]')].map(el => ({
     el,
     s: parseFloat(el.dataset.para),
@@ -424,21 +571,63 @@
     y: 0,
   }));
 
-  let smoothY = scrollY;
+  // pin progress: 0 when the wrapper hits the top, 1 when its scroll length is spent
+  function pinProgress(el, vh) {
+    const r = el.getBoundingClientRect();
+    return clamp01(-r.top / (r.height - vh));
+  }
+
   function frame() {
     requestAnimationFrame(frame);
     if (reduced) return;
-    smoothY += (scrollY - smoothY) * 0.1;
-    const vh = innerHeight;
+    const vh = innerHeight, vw = innerWidth;
 
-    // hero: video drifts slower than the page, content faster + fades
-    if (smoothY < vh * 1.2) {
-      heroVid.style.transform = `translate3d(0, ${(smoothY * 0.3).toFixed(1)}px, 0) scale(1.06)`;
-      heroInner.style.transform = `translate3d(0, ${(smoothY * 0.45).toFixed(1)}px, 0)`;
-      heroInner.style.opacity = Math.max(0, 1 - smoothY / (vh * 0.72)).toFixed(3);
+    // ---- act 1: portal opens into the 3D city ----
+    const p1 = pinProgress(act1, vh);
+    const grow = easeIO(clamp01((p1 - 0.10) / 0.72));
+    const cover = Math.hypot(vw, vh) / 2 + 40;
+    const R = 90 + (cover - 90) * grow;
+    const cy = 86 - 36 * clamp01(grow * 1.5);
+    portal.style.clipPath = `circle(${R.toFixed(1)}px at 50% ${cy.toFixed(2)}%)`;
+    a1title.style.transform = `translate3d(0, ${(-p1 * 34).toFixed(2)}vh, 0)`;
+    a1title.style.opacity = clamp01(1 - p1 * 1.7).toFixed(3);
+    a1hint.style.opacity = clamp01(1 - p1 * 4).toFixed(3);
+    rings.style.transform = `scale(${(1 + grow * 0.7).toFixed(3)})`;
+    rings.style.opacity = clamp01(1 - grow * 1.1).toFixed(3);
+
+    // ---- act 2: headline slides across ----
+    const r2 = mq.getBoundingClientRect();
+    if (r2.top < vh && r2.bottom > 0) {
+      const vp = clamp01((vh - r2.top) / (vh + r2.height));
+      mq.style.transform = `translate3d(${((0.5 - vp) * 70).toFixed(2)}vw, 0, 0)`;
     }
 
-    // parallax layers: offset from viewport centre, eased each frame
+    // ---- act 3: route draws in ----
+    const r3 = act3.getBoundingClientRect();
+    if (r3.top < vh && r3.bottom > 0) {
+      const p3 = clamp01((vh * 0.85 - r3.top) / (r3.height * 0.85));
+      route.style.strokeDashoffset = (routeLen * (1 - p3)).toFixed(1);
+      marks[0].classList.toggle('on', p3 > 0.06);
+      marks[1].classList.toggle('on', p3 > 0.52);
+      marks[2].classList.toggle('on', p3 > 0.93);
+    }
+
+    // ---- act 4: gauge slides ----
+    const p4 = Math.min(pinProgress(act4, vh), 0.985);
+    const sp = p4 * 3;
+    const idx = Math.min(2, Math.floor(sp));
+    const t = sp - idx;
+    setSlide(idx);
+    const fadeIn = idx === 0 ? 1 : clamp01(t / 0.10);
+    const fadeOut = idx === 2 ? 1 : clamp01((1 - t) / 0.10);
+    a4content.style.opacity = Math.min(fadeIn, fadeOut).toFixed(3);
+    const sweep = easeIO(clamp01(t * 1.15));
+    arcs.forEach((a, i) => {
+      const local = clamp01(sweep * 1.2 - i * 0.08);
+      a.el.style.strokeDashoffset = (a.C * (1 - a.frac * local)).toFixed(1);
+    });
+
+    // ---- generic parallax ----
     for (const p of paras) {
       const r = p.el.getBoundingClientRect();
       const baseCenter = r.top + r.height / 2 - p.y;

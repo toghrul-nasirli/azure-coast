@@ -82,6 +82,9 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(DAY.bg);
 scene.fog = new THREE.Fog(DAY.fog, DAY.fogNear, DAY.fogFar);
 
+// ?embed strips the HUD so the bare scene can be framed by another page
+if (new URLSearchParams(location.search).has('embed')) document.body.classList.add('embed');
+
 const mobileQuery = matchMedia('(max-width: 768px)');
 const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 1, 4000);
 // portrait screens need to start further out to fit the whole coast
