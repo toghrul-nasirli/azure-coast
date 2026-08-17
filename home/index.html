@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>Azure Coast — A City by the Sea</title>
+<style>
+  :root {
+    --ink: #1c2b33;
+    --paper: #f4efe6;
+    --teal: #2e6f6a;
+    --gold: #d99a4e;
+    --muted: #8a8577;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+    background: var(--paper); color: var(--ink);
+  }
+  img, video { display: block; max-width: 100%; }
+  a { color: inherit; }
+  .serif { font-family: Georgia, "Times New Roman", serif; font-weight: 500; }
+  .label {
+    font-size: 11px; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- header ---------- */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 40;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 40px; transition: background .35s ease, box-shadow .35s ease;
+  }
+  header.solid { background: rgba(244,239,230,.94); box-shadow: 0 2px 24px rgba(40,30,10,.08); backdrop-filter: blur(8px); }
+  header .brand {
+    font-family: Georgia, serif; font-size: 20px; letter-spacing: .3em; text-indent: .3em;
+    color: #fff; text-decoration: none; transition: color .35s;
+  }
+  header.solid .brand { color: var(--ink); }
+  header nav { display: flex; gap: 30px; align-items: center; }
+  header nav a {
+    font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    text-decoration: none; color: rgba(255,255,255,.9); transition: color .35s;
+  }
+  header.solid nav a { color: var(--ink); }
+  header nav a.cta {
+    border: 1px solid currentColor; padding: 10px 18px; border-radius: 2px;
+  }
+  @media (max-width: 700px) {
+    header { padding: 16px 20px; }
+    header nav a:not(.cta) { display: none; }
+    header .brand { font-size: 16px; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; height: 100vh; height: 100dvh; overflow: hidden; background: #23423f; }
+  .hero video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  }
+  .hero .veil {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(15,30,35,.35) 0%, rgba(15,30,35,.15) 45%, rgba(15,30,35,.55) 100%);
+  }
+  .hero .inner {
+    position: relative; z-index: 2; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; color: #fff; padding: 0 24px;
+  }
+  .hero .kicker { font-size: 12px; letter-spacing: .38em; text-transform: uppercase; opacity: .85; }
+  .hero h1 {
+    font-family: Georgia, serif; font-weight: 500;
+    font-size: clamp(44px, 8vw, 92px); letter-spacing: .18em; text-indent: .18em;
+    margin: 26px 0 18px;
+  }
+  .hero p { max-width: 560px; font-size: 14px; letter-spacing: .12em; text-transform: uppercase; line-height: 2; opacity: .9; }
+  .hero .actions { margin-top: 44px; display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    display: inline-block; padding: 16px 34px; border-radius: 2px; text-decoration: none;
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase; transition: all .25s;
+  }
+  .btn.light { background: rgba(255,255,255,.92); color: var(--ink); }
+  .btn.light:hover { background: #fff; }
+  .btn.ghost { border: 1px solid rgba(255,255,255,.7); color: #fff; }
+  .btn.ghost:hover { background: rgba(255,255,255,.15); }
+  .hero .scroll {
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 2;
+    color: #fff; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; opacity: .8;
+  }
+  .hero .scroll::after {
+    content: ""; display: block; width: 1px; height: 34px; background: #fff;
+    margin: 10px auto 0; animation: drip 2s ease infinite;
+  }
+  @keyframes drip { 0% { transform: scaleY(0); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: top; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+  /* ---------- sections ---------- */
+  section { padding: 110px 8vw; }
+  section h2 {
+    font-family: Georgia, serif; font-weight: 500;
+    font-size: clamp(30px, 4vw, 46px); letter-spacing: .08em; margin: 18px 0 26px;
+  }
+  section .lead { max-width: 620px; font-size: 13px; letter-spacing: .06em; line-height: 2.1; color: #4a463c; text-transform: uppercase; }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 40px; margin-top: 70px; }
+  .stats .stat { border-top: 1px solid #d8cfba; padding-top: 22px; }
+  .stats .num { font-family: Georgia, serif; font-size: 46px; color: var(--teal); }
+  .stats .num small { font-size: 22px; }
+  .stats .cap { margin-top: 8px; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+
+  /* split section */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 7vw; align-items: center; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+  .videocard { position: relative; border-radius: 4px; overflow: hidden; box-shadow: 0 30px 70px rgba(40,30,10,.22); aspect-ratio: 4 / 3; background: linear-gradient(135deg, #5f958f, #e6d3ac); }
+  .videocard video { width: 100%; height: 100%; object-fit: cover; }
+
+  /* residences */
+  #residences { background: #ece5d6; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 26px; margin-top: 56px; }
+  .card {
+    text-decoration: none; background: var(--paper); border-radius: 4px; overflow: hidden;
+    box-shadow: 0 14px 40px rgba(40,30,10,.10); transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 26px 60px rgba(40,30,10,.18); }
+  .card .art { height: 190px; }
+  .card .meta { padding: 22px 24px 26px; }
+  .card .meta .label { font-size: 9px; }
+  .card .meta h3 { font-family: Georgia, serif; font-weight: 500; font-size: 21px; letter-spacing: .06em; margin: 8px 0 10px; }
+  .card .meta .go { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--teal); }
+
+  /* amenities */
+  .amenities { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 22px; margin-top: 56px; }
+  .amenity {
+    background: #fff; border-radius: 4px; padding: 30px 26px;
+    box-shadow: 0 10px 30px rgba(40,30,10,.07);
+  }
+  .amenity svg { width: 34px; height: 34px; stroke: var(--teal); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .amenity h3 { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; margin: 18px 0 10px; }
+  .amenity p { font-size: 12px; line-height: 1.8; color: #6a6558; }
+
+  /* wide video band */
+  .band { position: relative; height: 72vh; min-height: 420px; overflow: hidden; background: #23423f; padding: 0; }
+  .band video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .band .veil { position: absolute; inset: 0; background: rgba(15,30,35,.42); }
+  .band .inner {
+    position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; color: #fff; padding: 0 24px;
+  }
+  .band .inner .quote { font-family: Georgia, serif; font-size: clamp(24px, 3.4vw, 40px); letter-spacing: .1em; max-width: 800px; line-height: 1.5; }
+
+  /* contact / footer */
+  #contact .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; margin-top: 56px; }
+  #contact .row .label { margin-bottom: 12px; }
+  #contact .row p { font-size: 14px; line-height: 1.9; }
+  footer {
+    padding: 40px 8vw 46px; border-top: 1px solid #d8cfba;
+    display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between;
+  }
+  footer .fine { font-size: 10px; letter-spacing: .08em; color: var(--muted); line-height: 1.8; max-width: 640px; }
+  footer a { color: var(--teal); }
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <a class="brand" href="#top">AZURE COAST</a>
+  <nav>
+    <a href="#live">Life</a>
+    <a href="#residences">Residences</a>
+    <a href="#contact">Contact</a>
+    <a class="cta" href="../">3D Master Plan</a>
+  </nav>
+</header>
+
+<!-- ================= HERO ================= -->
+<div class="hero" id="top">
+  <video autoplay muted loop playsinline preload="metadata"
+    src="https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c6/Aerial_view_of_sand_beach._Top_view_sea_waves._Drone_footage.webm/Aerial_view_of_sand_beach._Top_view_sea_waves._Drone_footage.webm.480p.vp9.webm"></video>
+  <div class="veil"></div>
+  <div class="inner">
+    <div class="kicker">The Caspian Riviera</div>
+    <h1>AZURE COAST</h1>
+    <p>A new city by the sea &mdash; nine kilometres of beach, white quarters, marinas and parks</p>
+    <div class="actions">
+      <a class="btn light" href="../">Explore the 3D master plan</a>
+      <a class="btn ghost" href="#residences">Residences</a>
+    </div>
+  </div>
+  <div class="scroll">Scroll</div>
+</div>
+
+<!-- ================= INTRO / STATS ================= -->
+<section id="about">
+  <div class="reveal">
+    <div class="label">About the project</div>
+    <h2>A city built around the sea</h2>
+    <p class="lead">Azure Coast grows along a nine-kilometre shoreline: snow-white residential quarters,
+    a crescent marina island, hotels, schools and parks &mdash; planned as one calm, walkable city
+    where every street ends at the water.</p>
+  </div>
+  <div class="stats reveal">
+    <div class="stat"><div class="num">310<small> ha</small></div><div class="cap">Master plan area</div></div>
+    <div class="stat"><div class="num">9<small> km</small></div><div class="cap">Sea coastline</div></div>
+    <div class="stat"><div class="num">25</div><div class="cap">Residential projects</div></div>
+    <div class="stat"><div class="num">2029</div><div class="cap">Full completion</div></div>
+  </div>
+</section>
+
+<!-- ================= LIVE ================= -->
+<section id="live">
+  <div class="split">
+    <div class="reveal">
+      <div class="label">Live in Azure Coast</div>
+      <h2>Days that begin on the water</h2>
+      <p class="lead">Morning swims before work, schools within a short walk, evening promenades
+      along the marina. The city is planned for people who live here all year &mdash;
+      not only for the summer.</p>
+      <div style="margin-top:36px"><a class="btn ghost" style="border-color: var(--ink); color: var(--ink);" href="../">See it on the 3D map</a></div>
+    </div>
+    <div class="videocard reveal">
+      <video muted loop playsinline preload="none" data-lazy
+        src="https://upload.wikimedia.org/wikipedia/commons/transcoded/4/4a/Goishi_Beach_and_Neya_Fishing_Port%2C_Murakami%2C_Niigata%2C_Japan_-_Aerial_Video.webm/Goishi_Beach_and_Neya_Fishing_Port%2C_Murakami%2C_Niigata%2C_Japan_-_Aerial_Video.webm.480p.vp9.webm"></video>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RESIDENCES ================= -->
+<section id="residences">
+  <div class="reveal">
+    <div class="label">Real estate</div>
+    <h2>Residences</h2>
+    <p class="lead">Six quarters are open for sale today. Every project can be explored
+    on the interactive 3D master plan.</p>
+  </div>
+  <div class="grid reveal">
+    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #5f958f, #e6d3ac)"></div>
+      <div class="meta"><div class="label">Delivery 2027</div><h3>Crescent Marina</h3><div class="go">View on the map &rsaquo;</div></div></a>
+    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #d99a4e, #f4efe6)"></div>
+      <div class="meta"><div class="label">Delivery 2027</div><h3>Lighthouse Bay</h3><div class="go">View on the map &rsaquo;</div></div></a>
+    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #274a63, #a8b183)"></div>
+      <div class="meta"><div class="label">Delivery 2028</div><h3>Panorama Towers</h3><div class="go">View on the map &rsaquo;</div></div></a>
+    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #c9805e, #a8b183)"></div>
+      <div class="meta"><div class="label">Delivery 2026</div><h3>Garden Villas</h3><div class="go">View on the map &rsaquo;</div></div></a>
+    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #2e6f6a, #e6d3ac)"></div>
+      <div class="meta"><div class="label">Delivery 2028</div><h3>Porto Verde</h3><div class="go">View on the map &rsaquo;</div></div></a>
+    <a class="card" href="../"><div class="art" style="background: linear-gradient(135deg, #f4efe6, #274a63)"></div>
+      <div class="meta"><div class="label">Delivery 2029</div><h3>Star Plaza</h3><div class="go">View on the map &rsaquo;</div></div></a>
+  </div>
+</section>
+
+<!-- ================= AMENITIES ================= -->
+<section id="life">
+  <div class="reveal">
+    <div class="label">Everything for life</div>
+    <h2>The city takes care of the rest</h2>
+  </div>
+  <div class="amenities reveal">
+    <div class="amenity">
+      <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 11h.01M15 11h.01"/></svg>
+      <h3>Hotels</h3><p>Boutique and resort hotels on the first line, open all year round.</p></div>
+    <div class="amenity">
+      <svg viewBox="0 0 24 24"><path d="M5 3v7a3 3 0 0 0 6 0V3M8 3v18M18 3c-2 2-2.5 5-2.5 8H18v10"/></svg>
+      <h3>Restaurants &amp; bars</h3><p>Seafront dining, cafés and beach bars along the promenades.</p></div>
+    <div class="amenity">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"/><path d="M6 21v-3a6 6 0 0 1 12 0v3M9 13l-3 3M15 13l3 3"/></svg>
+      <h3>For kids</h3><p>Kindergartens, an international school and shaded playgrounds.</p></div>
+    <div class="amenity">
+      <svg viewBox="0 0 24 24"><path d="M6 7h12l1.5 14h-15L6 7zM9 7a3 3 0 0 1 6 0"/></svg>
+      <h3>Shopping</h3><p>A retail street with daily services, markets and galleries.</p></div>
+    <div class="amenity">
+      <svg viewBox="0 0 24 24"><path d="M4 18c2-1.5 4-1.5 6 0s4 1.5 6 0 3-1.2 4-0.5M12 14V4m0 0 5 7H7l5-7z"/></svg>
+      <h3>Marina &amp; yacht club</h3><p>A 400-berth marina inside the crescent island.</p></div>
+    <div class="amenity">
+      <svg viewBox="0 0 24 24"><circle cx="7" cy="19" r="2"/><path d="M7 17V5m0 0 9 3-9 3M14 19h7"/></svg>
+      <h3>Golf</h3><p>A links course between the dunes on the north shore.</p></div>
+    <div class="amenity">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.2 2.2M16.9 16.9l2.2 2.2M4.9 19.1l2.2-2.2M16.9 7.1l2.2-2.2"/></svg>
+      <h3>Beach clubs</h3><p>Nine kilometres of managed beaches with pools and sports.</p></div>
+    <div class="amenity">
+      <svg viewBox="0 0 24 24"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7zM7 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
+      <h3>Delivery</h3><p>In-city delivery from shops and restaurants within 30 minutes.</p></div>
+  </div>
+</section>
+
+<!-- ================= VIDEO BAND ================= -->
+<section class="band">
+  <video muted loop playsinline preload="none" data-lazy
+    src="https://upload.wikimedia.org/wikipedia/commons/transcoded/e/ec/Fujitsuka-hama_Beach_in_Summer%2C_Japan_-_Aerial_Video.webm/Fujitsuka-hama_Beach_in_Summer%2C_Japan_-_Aerial_Video.webm.480p.vp9.webm"></video>
+  <div class="veil"></div>
+  <div class="inner">
+    <div class="reveal in">
+      <div class="label" style="color: rgba(255,255,255,.8)">The shore is the city</div>
+      <div class="quote">&ldquo;Quiet luxury is a morning when the sea is the first thing you see.&rdquo;</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact">
+  <div class="reveal">
+    <div class="label">Contact</div>
+    <h2>Visit the sales gallery</h2>
+  </div>
+  <div class="row reveal">
+    <div><div class="label">Address</div><p>Azure Coast Sales Gallery<br/>Marina Promenade 1, The Crescent</p></div>
+    <div><div class="label">Phone</div><p>*777<br/>+000 12 345 67 89</p></div>
+    <div><div class="label">Email</div><p>hello@azurecoast.example</p></div>
+    <div><div class="label">Master plan</div><p><a href="../">Open the interactive 3D map &rsaquo;</a></p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="fine">
+    Azure Coast is a fictional demonstration project. It is not affiliated with, endorsed by, or connected to
+    any real development. All names, figures and dates are invented. Background videos are free-licensed
+    footage from Wikimedia Commons.
+  </div>
+  <div class="fine"><a href="../">3D master plan</a></div>
+</footer>
+
+<script>
+  // header turns solid after leaving the hero
+  const hdr = document.getElementById('hdr');
+  addEventListener('scroll', () => {
+    hdr.classList.toggle('solid', scrollY > innerHeight * 0.75);
+  }, { passive: true });
+
+  // reveal-on-scroll + lazy video playback
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.target.classList.contains('reveal')) {
+        if (e.isIntersecting) e.target.classList.add('in');
+        return;
+      }
+      // data-lazy videos: load & play in view, pause out of view
+      if (e.isIntersecting) {
+        if (!e.target.dataset.loaded) { e.target.dataset.loaded = '1'; e.target.load(); }
+        e.target.play().catch(() => {});
+      } else {
+        e.target.pause();
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  document.querySelectorAll('video[data-lazy]').forEach(v => io.observe(v));
+</script>
+</body>
+</html>
